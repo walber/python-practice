@@ -1,38 +1,35 @@
 
 def mergesort(arr):
-    def merge(arr_l, arr_r):
+    def merge(arr, lb, mid, ub):
 
-        sorted_arr = []
-        L, R = len(arr_l), len(arr_r)
-        l = r = 0
+        helper_arr = arr[lb:ub + 1]
+        curr = l = lb
+        r = mid + 1
 
-        while l < L and r < R:
-            if arr_l[l] < arr_r[r]:
-                sorted_arr.append(arr_l[l])
+        while l <= mid and r <= ub:
+            if helper_arr[l - lb] < helper_arr[r - lb]:
+                arr[curr] = helper_arr[l - lb]
                 l += 1
             else:
-                sorted_arr.append(arr_r[r])
+                arr[curr] = helper_arr[r - lb]
                 r += 1
+            curr +=1
 
-        sorted_arr.extend(arr_l[l:L])
-        sorted_arr.extend(arr_r[r:R])
-
-        return sorted_arr
+        for i in range(l, mid + 1):
+            arr[curr] = helper_arr[i - lb]
+            curr += 1
         
 
     def sort(arr, lb, ub):
-         
-        if  lb == ub:
-            return [arr[lb]]
 
-        mid = (lb + ub) // 2
-        l = sort(arr, lb, mid)
-        r = sort(arr, mid + 1, ub)
+        if lb < ub:
+            mid = (lb + ub) // 2
+            sort(arr, lb, mid)
+            sort(arr, mid + 1, ub)
+            merge(arr, lb, mid, ub)
 
-        return merge(l, r)
 
-    return sort(arr, 0, len(arr) - 1) if len(arr) > 0 else arr
-
+    return sort(arr, 0, len(arr) - 1)
     
 
 
